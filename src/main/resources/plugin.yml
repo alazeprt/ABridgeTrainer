@@ -1,0 +1,8 @@
+name: AFastBuilder
+main: com.alazeprt.afb.AFastBuilder
+version: 1.0-SNAPSHOT
+api-version: 1.13
+author: alazeprt
+commands:
+  afb:
+    description: Plugin main command
