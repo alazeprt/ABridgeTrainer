@@ -1,0 +1,206 @@
+package com.alazeprt.afb.commands;
+
+import com.alazeprt.afb.AFastBuilder;
+import com.alazeprt.afb.utils.TempSite;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
+
+import static com.alazeprt.afb.utils.Common.getGroup;
+
+public class BasicCommandHandler implements CommandExecutor {
+    public static void register() {
+        AFastBuilder.getProvidingPlugin(AFastBuilder.class).getCommand("afb").setExecutor(new BasicCommandHandler());
+    }
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        ErrorCommandHandler errorCommandHandler = new ErrorCommandHandler(sender);
+        if(!sender.hasPermission("afb.player")) {
+            errorCommandHandler.permission();
+            return false;
+        }
+        PlayerCommandHandler playerCommandHandler = new PlayerCommandHandler(sender);
+        AdminCommandHandler adminCommandHandler = new AdminCommandHandler(sender);
+        switch (args.length) {
+            case 0:
+                if(sender.hasPermission("afb.admin")) {
+                    adminCommandHandler.help();
+                } else {
+                    playerCommandHandler.help();
+                }
+                break;
+            case 1:
+                if(args[0].equals("help")) {
+                    if(sender.hasPermission("afb.admin")) {
+                        adminCommandHandler.help();
+                    } else {
+                        playerCommandHandler.help();
+                    }
+                }
+                // admin commands
+                if(args[0].equals("setLobby")) {
+                    if(sender instanceof ConsoleCommandSender) {
+                        errorCommandHandler.console();
+                    } else if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.lobby();
+                    }
+                }
+                if(args[0].equals("listGroup")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.listGroup("1");
+                    }
+                }
+                if(args[0].equals("listSite")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.listSite("1");
+                    }
+                }
+                // player commands
+                if(args[0].equals("lobby")) {
+                    if(sender instanceof ConsoleCommandSender) {
+                        errorCommandHandler.console();
+                    } else {
+                        playerCommandHandler.lobby();
+                    }
+                }
+                break;
+            case 2:
+                if(args[0].equals("createGroup")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.createGroup(args[1], args[1]);
+                    }
+                }
+                if(args[0].equals("removeGroup")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.removeGroup(args[1]);
+                    }
+                }
+                if(args[0].equals("listGroup")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.listGroup(args[1]);
+                    }
+                }
+                if(args[0].equals("createSite")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.createSite(new TempSite(args[1]));
+                    }
+                }
+                if(args[0].equals("editSite")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.editSite(args[1]);
+                    }
+                }
+                if(args[0].equals("removeSite")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.removeSite(args[1]);
+                    }
+                }
+                if(args[0].equals("listSite")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.listSite(args[1]);
+                    }
+                }
+                if(args[0].equals("setPos1")) {
+                    if(sender instanceof ConsoleCommandSender) {
+                        errorCommandHandler.console();
+                    } else if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.setPos1(args[1]);
+                    }
+                }
+                if(args[0].equals("setPos2")) {
+                    if(sender instanceof ConsoleCommandSender) {
+                        errorCommandHandler.console();
+                    } else if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.setPos2(args[1]);
+                    }
+                }
+                if(args[0].equals("setSpawn")) {
+                    if(sender instanceof ConsoleCommandSender) {
+                        errorCommandHandler.console();
+                    } else if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.setSpawn(args[1]);
+                    }
+                }
+                if(args[0].equals("setEndPos")) {
+                    if(sender instanceof ConsoleCommandSender) {
+                        errorCommandHandler.console();
+                    } else if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.setEndPos(args[1]);
+                    }
+                }
+                if(args[0].equals("saveSite")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.saveSite(args[1]);
+                    }
+                }
+                if(args[0].equals("throwSite")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.throwSite(args[1]);
+                    }
+                }
+                break;
+            case 3:
+                if(args[0].equals("createGroup")) { // TODO: default: displayname -> args[2] -> args[end-1]
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.createGroup(args[1], args[2]);
+                    }
+                }
+                if(args[0].equals("createSite")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.createSite(new TempSite(args[1], args[2]));
+                    }
+                }
+            case 4:
+                if(args[0].equals("createSite")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        if(getGroup(args[3]) == null) {
+                            errorCommandHandler.operation("find group", new Throwable("Group not found"));
+                            return false;
+                        } else {
+                            adminCommandHandler.createSite(new TempSite(args[1], args[2], getGroup(args[3])));
+                        }
+                    }
+                }
+        }
+        return false;
+    }
+}

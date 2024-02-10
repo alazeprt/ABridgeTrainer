@@ -2,7 +2,7 @@ package com.alazeprt.afb.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import static com.alazeprt.afb.AFastBuilder.getMessage;
+import static com.alazeprt.afb.utils.Common.getMessage;
 
 public class ErrorCommandHandler {
     private final CommandSender sender;

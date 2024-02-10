@@ -5,7 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import static com.alazeprt.afb.AFastBuilder.*;
+import static com.alazeprt.afb.utils.Common.*;
 
 public class PlayerCommandHandler {
     private final CommandSender sender;
