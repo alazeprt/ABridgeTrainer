@@ -1,11 +1,15 @@
 player:
   help: "&eAFastBuilder Help"
   teleport_success: "&aTeleport successful!"
+  join_success: "&aSuccessfully joined %site%!"
+  exit_success: "&aSuccessfully exited!"
+  auto_teleport_to_lobby: "&aAutomatically teleporting you to the lobby"
 
 admin:
   help: "&eAFastBuilder Help &c[Admin]"
   operation_successful: "&aOperation successful!"
   successfully_enable_edit_mode: "&aSuccessfully enabled editing mode!"
+  saving_site_data: "&aSaving site data..."
   page:
     not_found: "&cThis page was not found!"
     group:
@@ -23,3 +27,8 @@ error:
   operation_failed: "&cFailed to operate %operation%! Please try again!"
   operation_failed_detail: "&cFailed to operate %operation%! Detailed error information: \n"
   name_exist: "&cThere is already an identical name! You can try changing the name"
+  lobby_not_set: "&cLobby doesn't set!"
+  not_found: "&c%type% not found!"
+  still_occupied: "&cThe %type% is still occupied by others"
+  not_in: "&cYou're not in the %somewhere%"
+  not_allowed: "&cYou're not allowed to do this!"

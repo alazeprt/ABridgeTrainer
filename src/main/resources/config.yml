@@ -1,2 +1,5 @@
 autoSave: true
 contentPerPage: 8
+deathYPosition: 50
+# AIR_PLACE / REPLACE
+clearMethod: "AIR_PLACE"

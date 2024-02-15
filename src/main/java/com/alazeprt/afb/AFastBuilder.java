@@ -1,6 +1,7 @@
 package com.alazeprt.afb;
 
 import com.alazeprt.afb.commands.BasicCommandHandler;
+import com.alazeprt.afb.events.BasicEventHandler;
 import com.alazeprt.afb.utils.ConfigurationHandler;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.event.Listener;
@@ -22,20 +23,21 @@ setSpawn <tempsite> ✔
 setEndPos <tempsite> ✔
 saveSite <tempsite> // remove(TempSite) && new Site() ✔
 throwSite <tempsite> // remove(TempSite) ✔
-reload [config/message]
+reload [config/message] ✔
 
 afastbuilder - playerCommand alias
-spawn  (able to no prefix)
+spawn  (able to no prefix) ✔
 lobby ✔
-join [site/group]
-exit
+join [site/group] ✔
+exit ✔
 help
 
 afastbuilder - events
-join -> -> lobby
-place -> ?
-break -> ?
-move -> y=? -> die
+join -> -> lobby ✔
+place -> ? ✔
+break -> ? ✔
+move -> y=? -> die ✔?
+exit -> remove using ✔
  */
 
 public class AFastBuilder extends JavaPlugin implements CommandExecutor, Listener {
@@ -43,6 +45,7 @@ public class AFastBuilder extends JavaPlugin implements CommandExecutor, Listene
     public void onEnable() {
         ConfigurationHandler.load(getDataFolder());
         BasicCommandHandler.register();
+        BasicEventHandler.register();
     }
 
     @Override

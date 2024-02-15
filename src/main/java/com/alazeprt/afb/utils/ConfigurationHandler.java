@@ -20,6 +20,7 @@ public class ConfigurationHandler {
         File configFile = new File(dataFolder, "config.yml");
         File messageFile = new File(dataFolder, "message.yml");
         File dataFile = new File(dataFolder, "data.yml");
+        File siteFolder = new File(dataFolder, "sites");
         if(!configFile.exists()) {
             AFastBuilder.getProvidingPlugin(AFastBuilder.class).saveResource("config.yml", false);
         }
@@ -28,6 +29,9 @@ public class ConfigurationHandler {
         }
         if(!dataFile.exists()) {
             AFastBuilder.getProvidingPlugin(AFastBuilder.class).saveResource("data.yml", false);
+        }
+        if(!siteFolder.exists()) {
+            siteFolder.mkdirs();
         }
         config = YamlConfiguration.loadConfiguration(configFile);
         message = YamlConfiguration.loadConfiguration(messageFile);
@@ -38,7 +42,6 @@ public class ConfigurationHandler {
         }
         try {
             Map<String, Object> siteMap = ((MemorySection) data.getValues(true).get("sites")).getValues(false);
-            System.out.println(Arrays.toString(siteMap.keySet().toArray()) + "   " + Arrays.toString(siteMap.values().toArray()));
             for(String siteName : siteMap.keySet()) {
                 Site site = new Site(siteName, new Location(
                         Bukkit.getWorld(data.getString("sites." + siteName + "." + "pos1.world")),
@@ -108,5 +111,21 @@ public class ConfigurationHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void reloadConfig() {
+        File configFile = new File(AFastBuilder.getProvidingPlugin(AFastBuilder.class).getDataFolder(), "config.yml");
+        if(!configFile.exists()) {
+            AFastBuilder.getProvidingPlugin(AFastBuilder.class).saveResource("config.yml", false);
+        }
+        config = YamlConfiguration.loadConfiguration(configFile);
+    }
+
+    public static void reloadMessage() {
+        File messageFile = new File(AFastBuilder.getProvidingPlugin(AFastBuilder.class).getDataFolder(), "message.yml");
+        if(!messageFile.exists()) {
+            AFastBuilder.getProvidingPlugin(AFastBuilder.class).saveResource("message.yml", false);
+        }
+        message = YamlConfiguration.loadConfiguration(messageFile);
     }
 }

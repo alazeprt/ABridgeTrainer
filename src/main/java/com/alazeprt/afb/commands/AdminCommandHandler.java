@@ -1,6 +1,7 @@
 package com.alazeprt.afb.commands;
 
 import com.alazeprt.afb.AFastBuilder;
+import com.alazeprt.afb.utils.Common;
 import com.alazeprt.afb.utils.Group;
 import com.alazeprt.afb.utils.Site;
 import com.alazeprt.afb.utils.TempSite;
@@ -11,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 
 import static com.alazeprt.afb.utils.Common.*;
+import static com.alazeprt.afb.utils.ConfigurationHandler.reloadConfig;
+import static com.alazeprt.afb.utils.ConfigurationHandler.reloadMessage;
 
 public class AdminCommandHandler {
     private final CommandSender sender;
@@ -176,7 +179,6 @@ public class AdminCommandHandler {
             if(siteList.size() <= i-1) {
                 break;
             }
-            System.out.println(siteList.get(i-1).getName() + " " + siteList.get(i-1).getDisplayName());
             sender.sendMessage(getMessage("admin.page.site.info").replace("%content_num%", String.valueOf(i))
                     .replace("%content_name%", siteList.get(i-1).getName())
                     .replace("%content_display_name%", siteList.get(i-1).getDisplayName()));
@@ -236,7 +238,7 @@ public class AdminCommandHandler {
                 tempSite.getDisplayName() == null ? tempSite.getName() : tempSite.getDisplayName());
         siteList.add(site);
         tempSiteList.remove(tempSite);
-        sender.sendMessage(getMessage("admin.operation_successful"));
+        Common.writeSiteToFile(sender, site);
     }
 
     public void throwSite(String arg) {
@@ -245,6 +247,18 @@ public class AdminCommandHandler {
             return;
         }
         tempSiteList.remove(getTempSite(arg));
+        sender.sendMessage(getMessage("admin.operation_successful"));
+    }
+
+    public void reload(String arg) {
+        if(arg.equals("config")) {
+            reloadConfig();
+        } else if(arg.equals("message")) {
+            reloadMessage();
+        } else {
+            reloadConfig();
+            reloadMessage();
+        }
         sender.sendMessage(getMessage("admin.operation_successful"));
     }
 }

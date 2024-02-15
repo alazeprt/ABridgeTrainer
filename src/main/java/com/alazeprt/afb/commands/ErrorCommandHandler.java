@@ -24,4 +24,19 @@ public class ErrorCommandHandler {
     public void operation(String operationName, Throwable throwable) {
         sender.sendMessage(getMessage("error.operation_failed_detail").replace("%operation%", operationName) + throwable.getMessage());
     }
+
+    public void notFound(String type) {
+        sender.sendMessage(getMessage("error.not_found").replace("%type%", type));
+    }
+
+    public void using(String type) {
+        sender.sendMessage(getMessage("error.still_occupied").replace("%type%", type));
+    }
+    public void notIn(String somewhere) {
+        sender.sendMessage(getMessage("error.not_in").replace("%somewhere%", somewhere));
+    }
+
+    public void notAllowed() {
+        sender.sendMessage(getMessage("error.not_allowed"));
+    }
 }

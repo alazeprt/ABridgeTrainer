@@ -62,6 +62,13 @@ public class BasicCommandHandler implements CommandExecutor {
                         adminCommandHandler.listSite("1");
                     }
                 }
+                if(args[0].equals("reload")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else {
+                        adminCommandHandler.reload("all");
+                    }
+                }
                 // player commands
                 if(args[0].equals("lobby")) {
                     if(sender instanceof ConsoleCommandSender) {
@@ -70,8 +77,30 @@ public class BasicCommandHandler implements CommandExecutor {
                         playerCommandHandler.lobby();
                     }
                 }
+                if(args[0].equals("join")) {
+                    if(sender instanceof ConsoleCommandSender) {
+                        errorCommandHandler.console();
+                    } else {
+                        playerCommandHandler.join(null);
+                    }
+                }
+                if(args[0].equals("exit")) {
+                    if(sender instanceof ConsoleCommandSender) {
+                        errorCommandHandler.console();
+                    } else {
+                        playerCommandHandler.exit();
+                    }
+                }
+                if(args[0].equals("spawn")) {
+                    if(sender instanceof ConsoleCommandSender) {
+                        errorCommandHandler.console();
+                    } else {
+                        playerCommandHandler.spawn();
+                    }
+                }
                 break;
             case 2:
+                // admin commands
                 if(args[0].equals("createGroup")) {
                     if(!sender.hasPermission("afb.admin")) {
                         errorCommandHandler.permission();
@@ -169,6 +198,24 @@ public class BasicCommandHandler implements CommandExecutor {
                         errorCommandHandler.permission();
                     } else {
                         adminCommandHandler.throwSite(args[1]);
+                    }
+                }
+                if(args[0].equals("reload")) {
+                    if(!sender.hasPermission("afb.admin")) {
+                        errorCommandHandler.permission();
+                    } else if(!args[1].equals("config") && !args[1].equals("message") &&
+                            !args[1].equals("all")) {
+                        errorCommandHandler.operation("reload", new Throwable("Invalid argument"));
+                    } else {
+                        adminCommandHandler.reload(args[1]);
+                    }
+                }
+                // player commands
+                if(args[0].equals("join")) {
+                    if(sender instanceof ConsoleCommandSender) {
+                        errorCommandHandler.console();
+                    } else {
+                        playerCommandHandler.join(args[1]);
                     }
                 }
                 break;
