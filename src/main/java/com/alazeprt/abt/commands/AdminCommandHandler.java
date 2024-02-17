@@ -20,7 +20,7 @@ public class AdminCommandHandler {
         this.sender = sender;
     }
     public void help() {
-        sender.sendMessage(getMessage("admin.help"));
+        getMessages("admin.help").forEach(sender::sendMessage);
     }
 
     public void lobby() {

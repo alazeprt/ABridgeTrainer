@@ -6,3 +6,12 @@ author: alazeprt
 commands:
   abt:
     description: Plugin main command
+permissions:
+  abt.admin:
+    default: op
+    description: Gives access to all commands
+    children:
+      abt.player: true
+  abt.player:
+    default: true
+    description: Gives access to command for bridging

@@ -1,6 +1,7 @@
 package com.alazeprt.abt;
 
 import com.alazeprt.abt.commands.BasicCommandHandler;
+import com.alazeprt.abt.commands.tab.BasicTabCompleter;
 import com.alazeprt.abt.events.BasicEventHandler;
 import com.alazeprt.abt.utils.Common;
 import com.alazeprt.abt.utils.ConfigurationHandler;
@@ -13,6 +14,7 @@ public class ABridgeTrainer extends JavaPlugin implements CommandExecutor, Liste
     public void onEnable() {
         ConfigurationHandler.load(getDataFolder());
         BasicCommandHandler.register();
+        BasicTabCompleter.register();
         BasicEventHandler.register();
     }
 

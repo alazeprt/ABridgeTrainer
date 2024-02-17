@@ -19,7 +19,7 @@ public class PlayerCommandHandler {
         this.sender = sender;
     }
     public void help() {
-        sender.sendMessage(getMessage("player.help"));
+        getMessages("player.help").forEach(sender::sendMessage);
     }
 
     public void lobby() {

@@ -22,6 +22,13 @@ public class Common {
         return origin.replace("&", "§");
     }
 
+    public static List<String> getMessages(String node) {
+        List<String> origin = message.getStringList(node);
+        List<String> result = new ArrayList<>();
+        origin.forEach(s -> result.add(s.replace("&", "§")));
+        return result;
+    }
+
     public static <T> T getConfiguration(String node, Class<T> type) {
         return type.cast(config.get(node));
     }
