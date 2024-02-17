@@ -1,6 +1,6 @@
-package com.alazeprt.afb.utils;
+package com.alazeprt.abt.utils;
 
-import com.alazeprt.afb.AFastBuilder;
+import com.alazeprt.abt.ABridgeTrainer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.MemorySection;
@@ -9,11 +9,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static com.alazeprt.afb.utils.Common.*;
+import static com.alazeprt.abt.utils.Common.*;
 
 public class ConfigurationHandler {
     public static void load(File dataFolder) {
@@ -22,13 +21,13 @@ public class ConfigurationHandler {
         File dataFile = new File(dataFolder, "data.yml");
         File siteFolder = new File(dataFolder, "sites");
         if(!configFile.exists()) {
-            AFastBuilder.getProvidingPlugin(AFastBuilder.class).saveResource("config.yml", false);
+            ABridgeTrainer.getProvidingPlugin(ABridgeTrainer.class).saveResource("config.yml", false);
         }
         if(!messageFile.exists()) {
-            AFastBuilder.getProvidingPlugin(AFastBuilder.class).saveResource("message.yml", false);
+            ABridgeTrainer.getProvidingPlugin(ABridgeTrainer.class).saveResource("message.yml", false);
         }
         if(!dataFile.exists()) {
-            AFastBuilder.getProvidingPlugin(AFastBuilder.class).saveResource("data.yml", false);
+            ABridgeTrainer.getProvidingPlugin(ABridgeTrainer.class).saveResource("data.yml", false);
         }
         if(!siteFolder.exists()) {
             siteFolder.mkdirs();
@@ -114,17 +113,17 @@ public class ConfigurationHandler {
     }
 
     public static void reloadConfig() {
-        File configFile = new File(AFastBuilder.getProvidingPlugin(AFastBuilder.class).getDataFolder(), "config.yml");
+        File configFile = new File(ABridgeTrainer.getProvidingPlugin(ABridgeTrainer.class).getDataFolder(), "config.yml");
         if(!configFile.exists()) {
-            AFastBuilder.getProvidingPlugin(AFastBuilder.class).saveResource("config.yml", false);
+            ABridgeTrainer.getProvidingPlugin(ABridgeTrainer.class).saveResource("config.yml", false);
         }
         config = YamlConfiguration.loadConfiguration(configFile);
     }
 
     public static void reloadMessage() {
-        File messageFile = new File(AFastBuilder.getProvidingPlugin(AFastBuilder.class).getDataFolder(), "message.yml");
+        File messageFile = new File(ABridgeTrainer.getProvidingPlugin(ABridgeTrainer.class).getDataFolder(), "message.yml");
         if(!messageFile.exists()) {
-            AFastBuilder.getProvidingPlugin(AFastBuilder.class).saveResource("message.yml", false);
+            ABridgeTrainer.getProvidingPlugin(ABridgeTrainer.class).saveResource("message.yml", false);
         }
         message = YamlConfiguration.loadConfiguration(messageFile);
     }

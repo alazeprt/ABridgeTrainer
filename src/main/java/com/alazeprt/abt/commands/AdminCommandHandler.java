@@ -1,19 +1,18 @@
-package com.alazeprt.afb.commands;
+package com.alazeprt.abt.commands;
 
-import com.alazeprt.afb.AFastBuilder;
-import com.alazeprt.afb.utils.Common;
-import com.alazeprt.afb.utils.Group;
-import com.alazeprt.afb.utils.Site;
-import com.alazeprt.afb.utils.TempSite;
+import com.alazeprt.abt.ABridgeTrainer;
+import com.alazeprt.abt.utils.Group;
+import com.alazeprt.abt.utils.Site;
+import com.alazeprt.abt.utils.TempSite;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
 
-import static com.alazeprt.afb.utils.Common.*;
-import static com.alazeprt.afb.utils.ConfigurationHandler.reloadConfig;
-import static com.alazeprt.afb.utils.ConfigurationHandler.reloadMessage;
+import static com.alazeprt.abt.utils.Common.*;
+import static com.alazeprt.abt.utils.ConfigurationHandler.reloadConfig;
+import static com.alazeprt.abt.utils.ConfigurationHandler.reloadMessage;
 
 public class AdminCommandHandler {
     private final CommandSender sender;
@@ -32,7 +31,7 @@ public class AdminCommandHandler {
         data.set("lobby.z", player.getLocation().getBlockZ());
         if(getConfiguration("autoSave", Boolean.class)) {
             try {
-                data.save(new File(AFastBuilder.getProvidingPlugin(AFastBuilder.class).getDataFolder(), "data.yml"));
+                data.save(new File(ABridgeTrainer.getProvidingPlugin(ABridgeTrainer.class).getDataFolder(), "data.yml"));
             } catch (IOException e) {
                 new ErrorCommandHandler(sender).operation("setLobby", e);
             }
@@ -136,6 +135,7 @@ public class AdminCommandHandler {
         tempSite.setPos2(site.getPos2());
         tempSite.setSpawn(site.getSpawn());
         tempSite.setEndPos(site.getEndPos());
+        tempSite.setOriginSite(site);
         tempSiteList.add(tempSite);
         sender.sendMessage(getMessage("admin.successfully_enable_edit_mode"));
     }
@@ -233,12 +233,14 @@ public class AdminCommandHandler {
             new ErrorCommandHandler(sender).operation("save site", new Throwable("Some arguments is null"));
             return;
         }
+        if(tempSite.getOriginSite() != null) {
+            siteList.remove(tempSite.getOriginSite());
+        }
         Site site = new Site(tempSite.getName(), tempSite.getPos1(), tempSite.getPos2(),
                 tempSite.getSpawn(), tempSite.getEndPos(), tempSite.getGroup(),
                 tempSite.getDisplayName() == null ? tempSite.getName() : tempSite.getDisplayName());
         siteList.add(site);
         tempSiteList.remove(tempSite);
-        Common.writeSiteToFile(sender, site);
     }
 
     public void throwSite(String arg) {

@@ -1,4 +1,4 @@
-package com.alazeprt.afb.utils;
+package com.alazeprt.abt.utils;
 
 import org.bukkit.Location;
 

@@ -1,4 +1,4 @@
-package com.alazeprt.afb.utils;
+package com.alazeprt.abt.utils;
 
 public class Group {
     private final String name;

@@ -1,23 +1,23 @@
 player:
-  help: "&eAFastBuilder Help"
+  help: "&eABridgeTrainer Help"
   teleport_success: "&aTeleport successful!"
   join_success: "&aSuccessfully joined %site%!"
   exit_success: "&aSuccessfully exited!"
   auto_teleport_to_lobby: "&aAutomatically teleporting you to the lobby"
 
 admin:
-  help: "&eAFastBuilder Help &c[Admin]"
+  help: "&eABridgeTrainer Help &c[Admin]"
   operation_successful: "&aOperation successful!"
   successfully_enable_edit_mode: "&aSuccessfully enabled editing mode!"
   saving_site_data: "&aSaving site data..."
   page:
     not_found: "&cThis page was not found!"
     group:
-      head: "&aAFastBuilder Group List"
+      head: "&aABridgeTrainer Group List"
       info: "&c%content_num%. &e%content_name% &7(&d%content_display_name%&7)"
       footer: "&f-------- &bPage %current_page% / %total_page% &f--------"
     site:
-      head: "&aAFastBuilder Site List"
+      head: "&aABridgeTrainer Site List"
       info: "&c%content_num%. &e%content_name% &7(&d%content_display_name%&7)"
       footer: "&f-------- &bPage %current_page% / %total_page% &f--------"
 
@@ -32,3 +32,4 @@ error:
   still_occupied: "&cThe %type% is still occupied by others"
   not_in: "&cYou're not in the %somewhere%"
   not_allowed: "&cYou're not allowed to do this!"
+  also_joined: "You have joined the site to play the game!"

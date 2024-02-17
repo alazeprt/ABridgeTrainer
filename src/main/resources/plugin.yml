@@ -1,8 +1,8 @@
-name: AFastBuilder
-main: com.alazeprt.afb.AFastBuilder
-version: 1.0-SNAPSHOT
+name: ABridgeTrainer
+main: com.alazeprt.abt.ABridgeTrainer
+version: 1.0-beta.1
 api-version: 1.13
 author: alazeprt
 commands:
-  afb:
+  abt:
     description: Plugin main command

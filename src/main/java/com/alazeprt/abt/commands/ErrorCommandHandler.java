@@ -1,8 +1,7 @@
-package com.alazeprt.afb.commands;
+package com.alazeprt.abt.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import static com.alazeprt.afb.utils.Common.getMessage;
+import static com.alazeprt.abt.utils.Common.getMessage;
 
 public class ErrorCommandHandler {
     private final CommandSender sender;

@@ -1,2 +1,2 @@
-rootProject.name = "AFastBuilder"
+rootProject.name = "ABridgeTrainer"
 

@@ -1,16 +1,17 @@
-package com.alazeprt.afb.commands;
+package com.alazeprt.abt.commands;
 
-import com.alazeprt.afb.utils.Common;
-import com.alazeprt.afb.utils.Group;
-import com.alazeprt.afb.utils.Site;
+import com.alazeprt.abt.utils.Common;
+import com.alazeprt.abt.utils.Group;
+import com.alazeprt.abt.utils.Site;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Map;
 
-import static com.alazeprt.afb.utils.Common.*;
+import static com.alazeprt.abt.utils.Common.*;
 
 public class PlayerCommandHandler {
     private final CommandSender sender;
@@ -36,6 +37,10 @@ public class PlayerCommandHandler {
     public void join(String arg) {
         Group selectedGroup = null;
         Site selectedSite = null;
+        if(usingSiteMap.containsValue(sender.getName())) {
+            sender.sendMessage(getMessage("error.also_joined"));
+            return;
+        }
         if(arg == null) {
             if(siteList.isEmpty()) {
                 new ErrorCommandHandler(sender).notFound("Site");
@@ -99,6 +104,7 @@ public class PlayerCommandHandler {
         Player player = (Player) sender;
         player.teleport(selectedSite.getSpawn());
         usingSiteMap.put(selectedSite, player.getName());
+        placedBlockMap.put(player.getName(), new ArrayList<>());
         player.sendMessage(getMessage("player.join_success").replace("%site%", selectedSite.getDisplayName()));
     }
 

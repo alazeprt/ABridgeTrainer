@@ -1,4 +1,4 @@
-package com.alazeprt.afb.utils;
+package com.alazeprt.abt.utils;
 
 import org.bukkit.Location;
 
@@ -10,6 +10,7 @@ public class TempSite {
     private Location spawn;
     private Location endPos;
     private Group group;
+    private Site originSite;;;;;;;;;;
     public TempSite(String name) {
         this.name = name;
     }
@@ -57,6 +58,9 @@ public class TempSite {
     public Group getGroup() {
         return group;
     }
+    public Site getOriginSite() {
+        return originSite;
+    }
 
     public void setPos1(Location pos1) {
         this.pos1 = pos1;
@@ -72,5 +76,8 @@ public class TempSite {
 
     public void setEndPos(Location endPos) {
         this.endPos = endPos;
+    }
+    public void setOriginSite(Site site) {
+        this.originSite = site;
     }
 }
