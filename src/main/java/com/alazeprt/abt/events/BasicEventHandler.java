@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -34,6 +35,10 @@ public class BasicEventHandler implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
+        if(notClean.contains(event.getPlayer().getName())) {
+            event.getPlayer().getInventory().clear();
+            notClean.remove(event.getPlayer().getName());
+        }
         event.getPlayer().sendMessage(getMessage("player.auto_teleport_to_lobby"));
         new PlayerCommandHandler(event.getPlayer()).lobby();
     }
@@ -105,6 +110,13 @@ public class BasicEventHandler implements Listener {
                                 }
                                 newList.add(event.getBlock().getLocation());
                                 placedBlockMap.put(event.getPlayer().getName(), newList);
+                                List<Object> blocks = getConfiguration("siteBlocks", List.class);
+                                for(int i = 0; i < blocks.size(); i++) {
+                                    try {
+                                        Material material = Material.valueOf(blocks.get(i).toString());
+                                        event.getPlayer().getInventory().setItem(i, new ItemStack(material));
+                                    } catch (Exception ignored) {}
+                                }
                                 return;
                             }
                         }

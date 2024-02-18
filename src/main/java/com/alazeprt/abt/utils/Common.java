@@ -19,6 +19,7 @@ public class Common {
     public static final List<TempSite> tempSiteList = new ArrayList<>();
     public static final List<Point<Site, String, StopWatch>> usingSiteList = new ArrayList<>();
     public static final Map<String, List<Location>> placedBlockMap = new HashMap<>();
+    public static final List<String> notClean = new ArrayList<>();
     public static String getMessage(String node) {
         String origin = message.getString(node) == null ? "" : message.getString(node);
         return origin.replace("&", "§");
@@ -101,6 +102,13 @@ public class Common {
     }
 
     private static void resetSite(String player, Site site, boolean exit) {
+        if (exit) {
+            try {
+                Bukkit.getPlayer(player).getInventory().clear();
+            } catch (Exception ignored) {
+                notClean.add(player);
+            }
+        }
         for(Location location : placedBlockMap.get(player)) {
             Chunk chunk = site.getPos1().getWorld().getChunkAt(location);
             Block block = chunk.getBlock(getChunkBlockAt(location.getBlockX()), location.getBlockY(), getChunkBlockAt(location.getBlockZ()));

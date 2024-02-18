@@ -7,10 +7,13 @@ import com.alazeprt.abt.utils.Site;
 import org.apache.commons.lang.time.StopWatch;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.alazeprt.abt.utils.Common.*;
@@ -121,6 +124,14 @@ public class PlayerCommandHandler {
             }
         }
         Player player = (Player) sender;
+        List<Object> blocks = getConfiguration("siteBlocks", List.class);
+        player.getInventory().clear();
+        for(int i = 0; i < blocks.size(); i++) {
+            try {
+                Material material = Material.valueOf(blocks.get(i).toString());
+                player.getInventory().setItem(i, new ItemStack(material));
+            } catch (Exception ignored) {}
+        }
         player.teleport(selectedSite.getSpawn());
         usingSiteList.add(new Point<>(selectedSite, player.getName(), new StopWatch()));
         placedBlockMap.put(player.getName(), new ArrayList<>());
