@@ -77,7 +77,7 @@ public class PlayerCommandHandler {
                     }
                 }
                 if(selectedSite == null) {
-                    new ErrorCommandHandler(sender).stillOccupied("Group or site");
+                    new ErrorCommandHandler(sender).notFound("group and site");
                     return;
                 }
             } else {
@@ -96,7 +96,7 @@ public class PlayerCommandHandler {
                     new ErrorCommandHandler(sender).stillOccupied("site");
                     return;
                 } else if(selectedSite == null) {
-                    new ErrorCommandHandler(sender).notFound("group or site");
+                    new ErrorCommandHandler(sender).notFound("site");
                     return;
                 }
             }
