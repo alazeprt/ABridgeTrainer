@@ -33,7 +33,7 @@ public class AdminCommandHandler {
             try {
                 data.save(new File(ABridgeTrainer.getProvidingPlugin(ABridgeTrainer.class).getDataFolder(), "data.yml"));
             } catch (IOException e) {
-                new ErrorCommandHandler(sender).operation("setLobby", e);
+                new ErrorCommandHandler(sender).saveFailed("lobby", e);
             }
         }
         sender.sendMessage(getMessage("admin.operation_successful"));
@@ -48,7 +48,7 @@ public class AdminCommandHandler {
             }
         }
         if(hasSameName) {
-            sender.sendMessage(getMessage("error.name_exist"));
+            new ErrorCommandHandler(sender).nameExists();
             return;
         }
         groupList.add(new Group(name, displayName));
@@ -57,7 +57,7 @@ public class AdminCommandHandler {
 
     public void removeGroup(String object) {
         if(getGroup(object) == null) {
-            new ErrorCommandHandler(sender).operation("remove group", new Throwable("Group not found"));
+            new ErrorCommandHandler(sender).removeFailed("group", new Throwable("group not found"));
         } else {
             groupList.remove(getGroup(object));
             sender.sendMessage(getMessage("admin.operation_successful"));
@@ -68,22 +68,22 @@ public class AdminCommandHandler {
         try {
             Integer.parseInt(page);
         } catch (Exception e) {
-            new ErrorCommandHandler(sender).operation("get page content", e);
+            new ErrorCommandHandler(sender).pageNotInteger();
             return;
         }
         int intPage = Integer.parseInt(page);
         if(intPage < 1) {
-            sender.sendMessage(getMessage("admin.page.not_found"));
+            new ErrorCommandHandler(sender).pageNotInteger();
             return;
         }
         int contentNum = groupList.size();
         int contentPerPage = getConfiguration("contentPerPage", Integer.class);
         if(contentNum == 0) {
-            sender.sendMessage(getMessage("admin.page.not_found"));
+            new ErrorCommandHandler(sender).notFound("this page");
             return;
         }
         if((contentNum / contentPerPage) + 1 < intPage) {
-            sender.sendMessage(getMessage("admin.page.not_found"));
+            new ErrorCommandHandler(sender).notFound("this page");
             return;
         }
         int startContent = ((intPage-1) * contentPerPage) + 1;
@@ -117,7 +117,7 @@ public class AdminCommandHandler {
             }
         }
         if(hasSameName) {
-            sender.sendMessage(getMessage("error.name_exist"));
+            new ErrorCommandHandler(sender).nameExists();
             return;
         }
         tempSiteList.add(tempSite);
@@ -126,7 +126,7 @@ public class AdminCommandHandler {
 
     public void editSite(String arg) {
         if(getSite(arg) == null) {
-            new ErrorCommandHandler(sender).operation("edit site", new Throwable("Site not found"));
+            new ErrorCommandHandler(sender).notFound("site");
             return;
         }
         Site site = getSite(arg);
@@ -142,7 +142,7 @@ public class AdminCommandHandler {
 
     public void removeSite(String arg) {
         if(getSite(arg) == null) {
-            new ErrorCommandHandler(sender).operation("remove site", new Throwable("Site not found"));
+            new ErrorCommandHandler(sender).notFound("site");
             return;
         }
         siteList.remove(getSite(arg));
@@ -153,22 +153,22 @@ public class AdminCommandHandler {
         try {
             Integer.parseInt(page);
         } catch (Exception e) {
-            new ErrorCommandHandler(sender).operation("get page content", e);
+            new ErrorCommandHandler(sender).pageNotInteger();
             return;
         }
         int intPage = Integer.parseInt(page);
         if(intPage < 1) {
-            sender.sendMessage(getMessage("admin.page.not_found"));
+            new ErrorCommandHandler(sender).pageNotInteger();
             return;
         }
         int contentNum = siteList.size();
         int contentPerPage = getConfiguration("contentPerPage", Integer.class);
         if(contentNum == 0) {
-            sender.sendMessage(getMessage("admin.page.not_found"));
+            new ErrorCommandHandler(sender).notFound("this page");
             return;
         }
         if((contentNum / contentPerPage) + 1 < intPage) {
-            sender.sendMessage(getMessage("admin.page.not_found"));
+            new ErrorCommandHandler(sender).notFound("this page");
             return;
         }
         int startContent = ((intPage-1) * contentPerPage) + 1;
@@ -189,7 +189,7 @@ public class AdminCommandHandler {
 
     public void setPos1(String arg) {
         if(getTempSite(arg) == null) {
-            new ErrorCommandHandler(sender).operation("set pos1", new Throwable("TempSite not found"));
+            new ErrorCommandHandler(sender).notFound("editing or newly created sites");
             return;
         }
         getTempSite(arg).setPos1(((Player) sender).getLocation());
@@ -198,7 +198,7 @@ public class AdminCommandHandler {
 
     public void setPos2(String arg) {
         if(getTempSite(arg) == null) {
-            new ErrorCommandHandler(sender).operation("set pos2", new Throwable("TempSite not found"));
+            new ErrorCommandHandler(sender).notFound("editing or newly created sites");
             return;
         }
         getTempSite(arg).setPos2(((Player) sender).getLocation());
@@ -207,7 +207,7 @@ public class AdminCommandHandler {
 
     public void setSpawn(String arg) {
         if(getTempSite(arg) == null) {
-            new ErrorCommandHandler(sender).operation("set spawn", new Throwable("TempSite not found"));
+            new ErrorCommandHandler(sender).notFound("editing or newly created sites");
             return;
         }
         getTempSite(arg).setSpawn(((Player) sender).getLocation());
@@ -216,7 +216,7 @@ public class AdminCommandHandler {
 
     public void setEndPos(String arg) {
         if(getTempSite(arg) == null) {
-            new ErrorCommandHandler(sender).operation("set endPos", new Throwable("TempSite not found"));
+            new ErrorCommandHandler(sender).notFound("editing or newly created sites");
             return;
         }
         getTempSite(arg).setEndPos(((Player) sender).getLocation());
@@ -225,12 +225,12 @@ public class AdminCommandHandler {
 
     public void saveSite(String arg) {
         if(getTempSite(arg) == null) {
-            new ErrorCommandHandler(sender).operation("save site", new Throwable("TempSite not found"));
+            new ErrorCommandHandler(sender).notFound("editing or newly created sites");
             return;
         }
         TempSite tempSite = getTempSite(arg);
         if(tempSite.getPos1() == null && tempSite.getPos2() == null || tempSite.getSpawn() == null || tempSite.getEndPos() == null) {
-            new ErrorCommandHandler(sender).operation("save site", new Throwable("Some arguments is null"));
+            new ErrorCommandHandler(sender).siteIncompleteEditing();
             return;
         }
         if(tempSite.getOriginSite() != null) {
@@ -245,7 +245,7 @@ public class AdminCommandHandler {
 
     public void throwSite(String arg) {
         if(getTempSite(arg) == null) {
-            new ErrorCommandHandler(sender).operation("throw site", new Throwable("TempSite not found"));
+            new ErrorCommandHandler(sender).notFound("editing or newly created sites");
             return;
         }
         tempSiteList.remove(getTempSite(arg));

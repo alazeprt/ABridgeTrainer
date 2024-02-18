@@ -25,7 +25,7 @@ public class PlayerCommandHandler {
     public void lobby() {
         Player player = (Player) sender;
         if(data.get("lobby") == null) {
-            player.sendMessage(getMessage("error.lobby_not_set"));
+            new ErrorCommandHandler(sender).lobbyNotSet();
             return;
         }
         Location lobby = new Location(Bukkit.getWorld(data.getString("lobby.world")), data.getDouble("lobby.x"),
@@ -38,12 +38,12 @@ public class PlayerCommandHandler {
         Group selectedGroup = null;
         Site selectedSite = null;
         if(usingSiteMap.containsValue(sender.getName())) {
-            sender.sendMessage(getMessage("error.also_joined"));
+            new ErrorCommandHandler(sender).alsoJoinedSite();
             return;
         }
         if(arg == null) {
             if(siteList.isEmpty()) {
-                new ErrorCommandHandler(sender).notFound("Site");
+                new ErrorCommandHandler(sender).notFound("site");
                 return;
             }
             boolean using = false;
@@ -55,7 +55,7 @@ public class PlayerCommandHandler {
                 }
             }
             if(selectedSite == null && using) {
-                new ErrorCommandHandler(sender).using("site");
+                new ErrorCommandHandler(sender).stillOccupied("site");
                 return;
             }
         } else {
@@ -69,7 +69,7 @@ public class PlayerCommandHandler {
                 for(Site site : siteList) {
                     if(site.getName().equals(arg)) {
                         if(usingSiteMap.containsKey(site)) {
-                            new ErrorCommandHandler(sender).using("site");
+                            new ErrorCommandHandler(sender).stillOccupied("site");
                             return;
                         }
                         selectedSite = site;
@@ -77,7 +77,7 @@ public class PlayerCommandHandler {
                     }
                 }
                 if(selectedSite == null) {
-                    new ErrorCommandHandler(sender).notFound("Group or site");
+                    new ErrorCommandHandler(sender).stillOccupied("Group or site");
                     return;
                 }
             } else {
@@ -93,10 +93,10 @@ public class PlayerCommandHandler {
                     }
                 }
                 if(selectedSite == null && using) {
-                    new ErrorCommandHandler(sender).using("site");
+                    new ErrorCommandHandler(sender).stillOccupied("site");
                     return;
                 } else if(selectedSite == null) {
-                    new ErrorCommandHandler(sender).notFound("Group or site");
+                    new ErrorCommandHandler(sender).notFound("group or site");
                     return;
                 }
             }
@@ -113,14 +113,14 @@ public class PlayerCommandHandler {
         if(usingSiteMap.containsValue(player.getName())) {
             Common.resetSite(player);
         } else {
-            new ErrorCommandHandler(sender).notIn("site");
+            new ErrorCommandHandler(sender).notInSomewhere("site");
         }
     }
 
     public void spawn() {
         Player player = (Player) sender;
         if(!usingSiteMap.containsValue(player.getName())) {
-            new ErrorCommandHandler(sender).notIn("site");
+            new ErrorCommandHandler(sender).notInSomewhere("site");
         }
         for(Map.Entry<Site, String> entry : usingSiteMap.entrySet()) {
             if(entry.getValue().equals(player.getName())) {

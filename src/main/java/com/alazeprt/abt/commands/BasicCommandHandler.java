@@ -39,7 +39,7 @@ public class BasicCommandHandler implements CommandExecutor {
                     }
                 }
                 // admin commands
-                if(args[0].equals("setLobby")) {
+                else if(args[0].equals("setLobby")) {
                     if(sender instanceof ConsoleCommandSender) {
                         errorCommandHandler.console();
                     } else if(!sender.hasPermission("abt.admin")) {
@@ -47,22 +47,19 @@ public class BasicCommandHandler implements CommandExecutor {
                     } else {
                         adminCommandHandler.lobby();
                     }
-                }
-                if(args[0].equals("listGroup")) {
+                } else if(args[0].equals("listGroup")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else {
                         adminCommandHandler.listGroup("1");
                     }
-                }
-                if(args[0].equals("listSite")) {
+                } else if(args[0].equals("listSite")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else {
                         adminCommandHandler.listSite("1");
                     }
-                }
-                if(args[0].equals("reload")) {
+                } else if(args[0].equals("reload")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else {
@@ -70,33 +67,32 @@ public class BasicCommandHandler implements CommandExecutor {
                     }
                 }
                 // player commands
-                if(args[0].equals("lobby")) {
+                else if(args[0].equals("lobby")) {
                     if(sender instanceof ConsoleCommandSender) {
                         errorCommandHandler.console();
                     } else {
                         playerCommandHandler.lobby();
                     }
-                }
-                if(args[0].equals("join")) {
+                } else if(args[0].equals("join")) {
                     if(sender instanceof ConsoleCommandSender) {
                         errorCommandHandler.console();
                     } else {
                         playerCommandHandler.join(null);
                     }
-                }
-                if(args[0].equals("exit")) {
+                } else if(args[0].equals("exit")) {
                     if(sender instanceof ConsoleCommandSender) {
                         errorCommandHandler.console();
                     } else {
                         playerCommandHandler.exit();
                     }
-                }
-                if(args[0].equals("spawn")) {
+                } else if(args[0].equals("spawn")) {
                     if(sender instanceof ConsoleCommandSender) {
                         errorCommandHandler.console();
                     } else {
                         playerCommandHandler.spawn();
                     }
+                } else {
+                    errorCommandHandler.invalidArguments();
                 }
                 break;
             case 2:
@@ -107,50 +103,43 @@ public class BasicCommandHandler implements CommandExecutor {
                     } else {
                         adminCommandHandler.createGroup(args[1], args[1]);
                     }
-                }
-                if(args[0].equals("removeGroup")) {
+                } else if(args[0].equals("removeGroup")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else {
                         adminCommandHandler.removeGroup(args[1]);
                     }
-                }
-                if(args[0].equals("listGroup")) {
+                } else if(args[0].equals("listGroup")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else {
                         adminCommandHandler.listGroup(args[1]);
                     }
-                }
-                if(args[0].equals("createSite")) {
+                } else if(args[0].equals("createSite")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else {
                         adminCommandHandler.createSite(new TempSite(args[1]));
                     }
-                }
-                if(args[0].equals("editSite")) {
+                } else if(args[0].equals("editSite")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else {
                         adminCommandHandler.editSite(args[1]);
                     }
-                }
-                if(args[0].equals("removeSite")) {
+                } else if(args[0].equals("removeSite")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else {
                         adminCommandHandler.removeSite(args[1]);
                     }
-                }
-                if(args[0].equals("listSite")) {
+                } else if(args[0].equals("listSite")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else {
                         adminCommandHandler.listSite(args[1]);
                     }
-                }
-                if(args[0].equals("setPos1")) {
+                } else if(args[0].equals("setPos1")) {
                     if(sender instanceof ConsoleCommandSender) {
                         errorCommandHandler.console();
                     } else if(!sender.hasPermission("abt.admin")) {
@@ -158,8 +147,7 @@ public class BasicCommandHandler implements CommandExecutor {
                     } else {
                         adminCommandHandler.setPos1(args[1]);
                     }
-                }
-                if(args[0].equals("setPos2")) {
+                } else if(args[0].equals("setPos2")) {
                     if(sender instanceof ConsoleCommandSender) {
                         errorCommandHandler.console();
                     } else if(!sender.hasPermission("abt.admin")) {
@@ -167,8 +155,7 @@ public class BasicCommandHandler implements CommandExecutor {
                     } else {
                         adminCommandHandler.setPos2(args[1]);
                     }
-                }
-                if(args[0].equals("setSpawn")) {
+                } else if(args[0].equals("setSpawn")) {
                     if(sender instanceof ConsoleCommandSender) {
                         errorCommandHandler.console();
                     } else if(!sender.hasPermission("abt.admin")) {
@@ -176,8 +163,7 @@ public class BasicCommandHandler implements CommandExecutor {
                     } else {
                         adminCommandHandler.setSpawn(args[1]);
                     }
-                }
-                if(args[0].equals("setEndPos")) {
+                } else if(args[0].equals("setEndPos")) {
                     if(sender instanceof ConsoleCommandSender) {
                         errorCommandHandler.console();
                     } else if(!sender.hasPermission("abt.admin")) {
@@ -185,38 +171,37 @@ public class BasicCommandHandler implements CommandExecutor {
                     } else {
                         adminCommandHandler.setEndPos(args[1]);
                     }
-                }
-                if(args[0].equals("saveSite")) {
+                } else if(args[0].equals("saveSite")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else {
                         adminCommandHandler.saveSite(args[1]);
                     }
-                }
-                if(args[0].equals("throwSite")) {
+                } else if(args[0].equals("throwSite")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else {
                         adminCommandHandler.throwSite(args[1]);
                     }
-                }
-                if(args[0].equals("reload")) {
+                } else if(args[0].equals("reload")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else if(!args[1].equals("config") && !args[1].equals("message") &&
                             !args[1].equals("all")) {
-                        errorCommandHandler.operation("reload", new Throwable("Invalid argument"));
+                        errorCommandHandler.invalidArguments();
                     } else {
                         adminCommandHandler.reload(args[1]);
                     }
                 }
                 // player commands
-                if(args[0].equals("join")) {
+                else if(args[0].equals("join")) {
                     if(sender instanceof ConsoleCommandSender) {
                         errorCommandHandler.console();
                     } else {
                         playerCommandHandler.join(args[1]);
                     }
+                } else {
+                    errorCommandHandler.invalidArguments();
                 }
                 break;
             case 3:
@@ -226,27 +211,34 @@ public class BasicCommandHandler implements CommandExecutor {
                     } else {
                         adminCommandHandler.createGroup(args[1], args[2]);
                     }
-                }
-                if(args[0].equals("createSite")) {
+                } else if(args[0].equals("createSite")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else {
                         adminCommandHandler.createSite(new TempSite(args[1], args[2]));
                     }
+                } else {
+                    errorCommandHandler.invalidArguments();
                 }
+                break;
             case 4:
                 if(args[0].equals("createSite")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else {
                         if(getGroup(args[3]) == null) {
-                            errorCommandHandler.operation("find group", new Throwable("Group not found"));
+                            errorCommandHandler.notFound("group");
                             return false;
                         } else {
                             adminCommandHandler.createSite(new TempSite(args[1], args[2], getGroup(args[3])));
                         }
                     }
+                } else {
+                    errorCommandHandler.invalidArguments();
                 }
+                break;
+            default:
+                errorCommandHandler.invalidArguments();
         }
         return false;
     }

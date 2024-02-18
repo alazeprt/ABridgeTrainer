@@ -59,7 +59,7 @@ public class BasicEventHandler implements Listener {
         } else {
             player.sendMessage(getMessage("player.auto_teleport_to_lobby"));
             if(data.get("lobby") == null) {
-                player.sendMessage(getMessage("error.lobby_not_set"));
+                new ErrorCommandHandler(player).lobbyNotSet();
                 return;
             }
             Location lobby = new Location(Bukkit.getWorld(data.getString("lobby.world")), data.getDouble("lobby.x"),
