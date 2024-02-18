@@ -21,6 +21,6 @@ public class ABridgeTrainer extends JavaPlugin implements CommandExecutor, Liste
     @Override
     public void onDisable() {
         ConfigurationHandler.save(getDataFolder());
-        Common.resetAllSite();
+        Common.resetAllSite(true);
     }
 }

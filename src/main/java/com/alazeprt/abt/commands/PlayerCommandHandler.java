@@ -137,7 +137,9 @@ public class PlayerCommandHandler {
             }
         });
         if(contains.get()) {
-            Common.resetSite(player);
+            new PlayerCommandHandler(player).lobby();
+            Common.resetSite(player, true);
+            player.sendMessage(getMessage("player.exit_success"));
         } else {
             new ErrorCommandHandler(sender).notInSomewhere("site");
         }

@@ -29,13 +29,17 @@ public class StopwatchEventHandler {
         AtomicDouble atomicDouble = new AtomicDouble();
         usingSiteList.forEach(s -> {
             if(s.getValue1().equalsIgnoreCase(player)) {
-                s.getValue2().stop();
+                try {
+                    s.getValue2().stop();
+                } catch (IllegalStateException ignored) {}
                 atomicDouble.set(s.getValue2().getTime());
                 s.getValue2().reset();
             }
         });
-        map.get(player).cancel();
-        map.remove(player);
+        if(map.containsKey(player) && map.get(player) != null) {
+            map.get(player).cancel();
+            map.remove(player);
+        }
         return atomicDouble.doubleValue();
     }
 

@@ -3,6 +3,7 @@ package com.alazeprt.abt.events;
 import com.alazeprt.abt.ABridgeTrainer;
 import com.alazeprt.abt.commands.ErrorCommandHandler;
 import com.alazeprt.abt.commands.PlayerCommandHandler;
+import com.alazeprt.abt.utils.Common;
 import com.alazeprt.abt.utils.Point;
 import com.alazeprt.abt.utils.Site;
 import org.apache.commons.lang.time.StopWatch;
@@ -20,6 +21,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.alazeprt.abt.utils.Common.*;
 
@@ -39,7 +41,15 @@ public class BasicEventHandler implements Listener {
     @EventHandler
     public void onExit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        usingSiteList.removeIf(s -> s.getValue1().equalsIgnoreCase(player.getName()));
+        AtomicBoolean contains = new AtomicBoolean(false);
+        usingSiteList.forEach(s -> {
+            if(s.getValue1().equals(player.getName())) {
+                contains.set(true);
+            }
+        });
+        if(contains.get()) {
+            Common.resetSite(player, true);
+        }
     }
 
     @EventHandler
@@ -155,6 +165,9 @@ public class BasicEventHandler implements Listener {
                         .replace("ss", String.format("%02d", ((int) time) / 1000 % 60))
                         .replace("ms", String.valueOf(time%1000));
                 event.getPlayer().sendMessage(getMessage("player.finished").replace("%time%", formattedTime));
+                Common.resetSite(event.getPlayer(), false);
+                event.getPlayer().teleport(site.getSpawn());
+                placedBlockMap.clear();
             }
         }
     }

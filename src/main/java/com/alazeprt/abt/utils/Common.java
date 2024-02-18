@@ -86,32 +86,34 @@ public class Common {
         return tempSiteList.get(siteIndex-1);
     }
 
-    public static void resetSite(Player player) {
-        new PlayerCommandHandler(player).lobby();
+    public static void resetSite(Player player, boolean exit) {
         Iterator<Point<Site, String, StopWatch>> iterator = usingSiteList.iterator();
         while(iterator.hasNext()) {
             Point<Site, String, StopWatch> entry = iterator.next();
             if(entry.getValue1().equals(player.getName())) {
-                iterator.remove();
-                resetSite(entry.getValue1(), entry.getKey());
+                if(exit) {
+                    iterator.remove();
+                }
+                resetSite(entry.getValue1(), entry.getKey(), exit);
                 StopwatchEventHandler.stop(entry.getValue1());
             }
         }
-        player.sendMessage(getMessage("player.exit_success"));
     }
 
-    private static void resetSite(String player, Site site) {
+    private static void resetSite(String player, Site site, boolean exit) {
         for(Location location : placedBlockMap.get(player)) {
             Chunk chunk = site.getPos1().getWorld().getChunkAt(location);
             Block block = chunk.getBlock(getChunkBlockAt(location.getBlockX()), location.getBlockY(), getChunkBlockAt(location.getBlockZ()));
             block.setType(Material.AIR);
         }
-        placedBlockMap.remove(player);
+        if(exit) {
+            placedBlockMap.remove(player);
+        }
     }
 
-    public static void resetAllSite() {
+    public static void resetAllSite(boolean exit) {
         for(Point<Site, String, StopWatch> entry : usingSiteList) {
-            resetSite(entry.getValue1(), entry.getKey());
+            resetSite(entry.getValue1(), entry.getKey(), exit);
             StopwatchEventHandler.stop(entry.getValue1());
         }
     }
