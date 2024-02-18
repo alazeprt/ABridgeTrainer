@@ -15,10 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -79,6 +76,21 @@ public class BasicEventHandler implements Listener {
                 data.getDouble("lobby.y"), data.getDouble("lobby.z"));
         event.setRespawnLocation(lobby);
         player.sendMessage(getMessage("player.teleport_success"));
+    }
+
+    @EventHandler
+    public void onDrop(PlayerDropItemEvent event) {
+        for(Point<Site, String, StopWatch> entry : usingSiteList) {
+            if(entry.getValue1().equalsIgnoreCase(event.getPlayer().getName())) {
+                List<Object> blocks = getConfiguration("siteBlocks", List.class);
+                for(int i = 0; i < blocks.size(); i++) {
+                    try {
+                        Material material = Material.valueOf(blocks.get(i).toString());
+                        event.getPlayer().getInventory().setItem(i, new ItemStack(material));
+                    } catch (Exception ignored) {}
+                }
+            }
+        }
     }
 
     @EventHandler
