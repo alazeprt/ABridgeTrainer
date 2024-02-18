@@ -19,7 +19,6 @@ public class ConfigurationHandler {
         File configFile = new File(dataFolder, "config.yml");
         File messageFile = new File(dataFolder, "message.yml");
         File dataFile = new File(dataFolder, "data.yml");
-        File siteFolder = new File(dataFolder, "sites");
         if(!configFile.exists()) {
             ABridgeTrainer.getProvidingPlugin(ABridgeTrainer.class).saveResource("config.yml", false);
         }
@@ -28,9 +27,6 @@ public class ConfigurationHandler {
         }
         if(!dataFile.exists()) {
             ABridgeTrainer.getProvidingPlugin(ABridgeTrainer.class).saveResource("data.yml", false);
-        }
-        if(!siteFolder.exists()) {
-            siteFolder.mkdirs();
         }
         config = YamlConfiguration.loadConfiguration(configFile);
         message = YamlConfiguration.loadConfiguration(messageFile);

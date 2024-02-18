@@ -1,6 +1,7 @@
 package com.alazeprt.abt.utils;
 
 import com.alazeprt.abt.commands.PlayerCommandHandler;
+import com.alazeprt.abt.events.StopwatchEventHandler;
 import org.apache.commons.lang.time.StopWatch;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -93,6 +94,7 @@ public class Common {
             if(entry.getValue1().equals(player.getName())) {
                 iterator.remove();
                 resetSite(entry.getValue1(), entry.getKey());
+                StopwatchEventHandler.stop(entry.getValue1());
             }
         }
         player.sendMessage(getMessage("player.exit_success"));
@@ -110,6 +112,7 @@ public class Common {
     public static void resetAllSite() {
         for(Point<Site, String, StopWatch> entry : usingSiteList) {
             resetSite(entry.getValue1(), entry.getKey());
+            StopwatchEventHandler.stop(entry.getValue1());
         }
     }
 

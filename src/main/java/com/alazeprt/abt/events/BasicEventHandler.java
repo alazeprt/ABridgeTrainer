@@ -15,6 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -89,6 +90,9 @@ public class BasicEventHandler implements Listener {
                             }
                             if(event.getBlock().getType().equals(Material.valueOf(object.toString().toUpperCase()))) {
                                 List<Location> newList = placedBlockMap.get(event.getPlayer().getName());
+                                if(newList.isEmpty()) {
+                                    StopwatchEventHandler.start(event.getPlayer().getName());
+                                }
                                 newList.add(event.getBlock().getLocation());
                                 placedBlockMap.put(event.getPlayer().getName(), newList);
                                 return;
@@ -132,6 +136,27 @@ public class BasicEventHandler implements Listener {
         }
         event.setCancelled(true);
         new ErrorCommandHandler(event.getPlayer()).notAllowed();
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent event) {
+        for(Point<Site, String, StopWatch> entry : usingSiteList) {
+            if(!entry.getValue1().equals(event.getPlayer().getName())) {
+                continue;
+            }
+            Site site = entry.getKey();
+            if(Math.abs(event.getPlayer().getLocation().getBlockX() - site.getEndPos().getX()) < 1 &&
+            Math.abs(event.getPlayer().getLocation().getBlockY()) - site.getEndPos().getY() < 1.5 &&
+            Math.abs(event.getPlayer().getLocation().getBlockZ()) - site.getEndPos().getZ() < 1) {
+                double time = StopwatchEventHandler.stop(event.getPlayer().getName());
+                String formattedTime = getConfiguration("stopwatch.time_format", String.class)
+                        .replace("hh", String.valueOf(((int) time)/1000/60/60))
+                        .replace("mm", String.format("%02d", ((int) time) / 1000 / 60 % 60))
+                        .replace("ss", String.format("%02d", ((int) time) / 1000 % 60))
+                        .replace("ms", String.valueOf(time%1000));
+                event.getPlayer().sendMessage(getMessage("player.finished").replace("%time%", formattedTime));
+            }
+        }
     }
 
     static class killPlayerRunnable implements Runnable {

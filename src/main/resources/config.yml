@@ -3,3 +3,9 @@ contentPerPage: 8
 deathYPosition: 50
 siteBlocks:
   - "SANDSTONE"
+stopwatch:
+  # Unit: ms
+  period: 50
+  commands:
+    - "title %player% actionbar [{\"text\":\"Time: \",\"color\":\"gold\",\"bold\":true},{\"text\":\"%time%\",\"color\":\"yellow\",\"bold\":true}]"
+  time_format: "mm:ss"

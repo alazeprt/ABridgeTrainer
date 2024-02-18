@@ -10,6 +10,7 @@ player:
   join_success: "&aSuccessfully joined %site%!"
   exit_success: "&aSuccessfully exited!"
   auto_teleport_to_lobby: "&aAutomatically teleporting you to the lobby"
+  finished: "&eCompletion time of bridging: &6&l%time%"
 
 admin:
   help:
