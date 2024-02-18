@@ -205,7 +205,7 @@ public class BasicCommandHandler implements CommandExecutor {
                 }
                 break;
             case 3:
-                if(args[0].equals("createGroup")) { // TODO: default: displayname -> args[2] -> args[end-1]
+                if(args[0].equals("createGroup")) {
                     if(!sender.hasPermission("abt.admin")) {
                         errorCommandHandler.permission();
                     } else {

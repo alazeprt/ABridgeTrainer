@@ -96,7 +96,8 @@ public class AdminCommandHandler {
             }
             sender.sendMessage(getMessage("admin.page.group.info").replace("%content_num%", String.valueOf(i))
                     .replace("%content_name%", groupList.get(i-1).getName())
-                    .replace("%content_display_name%", groupList.get(i-1).getDisplayName()));
+                    .replace("%content_display_name%", groupList.get(i-1).getDisplayName()
+                            .replace("&", "§")));
         }
         sender.sendMessage(getMessage("admin.page.group.footer").replace("%current_page%", String.valueOf(intPage))
                 .replace("%total_page%", String.valueOf((contentNum / contentPerPage) + 1)));
@@ -181,7 +182,8 @@ public class AdminCommandHandler {
             }
             sender.sendMessage(getMessage("admin.page.site.info").replace("%content_num%", String.valueOf(i))
                     .replace("%content_name%", siteList.get(i-1).getName())
-                    .replace("%content_display_name%", siteList.get(i-1).getDisplayName()));
+                    .replace("%content_display_name%", siteList.get(i-1).getDisplayName()
+                            .replace("&", "§")));
         }
         sender.sendMessage(getMessage("admin.page.site.footer").replace("%current_page%", String.valueOf(intPage))
                 .replace("%total_page%", String.valueOf((contentNum / contentPerPage) + 1)));

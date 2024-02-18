@@ -2,14 +2,16 @@ package com.alazeprt.abt.commands;
 
 import com.alazeprt.abt.utils.Common;
 import com.alazeprt.abt.utils.Group;
+import com.alazeprt.abt.utils.Point;
 import com.alazeprt.abt.utils.Site;
+import org.apache.commons.lang.time.StopWatch;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.alazeprt.abt.utils.Common.*;
 
@@ -37,7 +39,13 @@ public class PlayerCommandHandler {
     public void join(String arg) {
         Group selectedGroup = null;
         Site selectedSite = null;
-        if(usingSiteMap.containsValue(sender.getName())) {
+        AtomicBoolean inSite = new AtomicBoolean(false);
+        usingSiteList.forEach(s -> {
+            if(s.getValue1().equalsIgnoreCase(sender.getName())) {
+                inSite.set(true);
+            }
+        });
+        if(inSite.get()) {
             new ErrorCommandHandler(sender).alsoJoinedSite();
             return;
         }
@@ -46,15 +54,18 @@ public class PlayerCommandHandler {
                 new ErrorCommandHandler(sender).notFound("site");
                 return;
             }
-            boolean using = false;
+            AtomicBoolean using = new AtomicBoolean(false);
             for(Site site : siteList) {
-                if(usingSiteMap.containsKey(site)) {
-                    using = true;
-                } else {
+                usingSiteList.forEach(s -> {
+                    if(s.getKey().equals(site)) {
+                        using.set(true);
+                    }
+                });
+                if(!using.get()) {
                     selectedSite = site;
                 }
             }
-            if(selectedSite == null && using) {
+            if(selectedSite == null && using.get()) {
                 new ErrorCommandHandler(sender).stillOccupied("site");
                 return;
             }
@@ -68,7 +79,13 @@ public class PlayerCommandHandler {
             if(selectedGroup == null) {
                 for(Site site : siteList) {
                     if(site.getName().equals(arg)) {
-                        if(usingSiteMap.containsKey(site)) {
+                        AtomicBoolean containsKey = new AtomicBoolean(false);
+                        usingSiteList.forEach(s -> {
+                            if(s.getKey().equals(site)) {
+                                containsKey.set(true);
+                            }
+                        });
+                        if(containsKey.get()) {
                             new ErrorCommandHandler(sender).stillOccupied("site");
                             return;
                         }
@@ -81,18 +98,20 @@ public class PlayerCommandHandler {
                     return;
                 }
             } else {
-                boolean using = false;
+                AtomicBoolean using = new AtomicBoolean(false);
                 for(Site site : siteList) {
                     if(site.getGroup().equals(selectedGroup)) {
-                        if(usingSiteMap.containsKey(site)) {
-                            using = true;
-                        } else {
+                        usingSiteList.forEach(s -> {
+                            if(s.getKey().equals(site)) {
+                                using.set(true);
+                            }
+                        });
+                        if(!using.get()) {
                             selectedSite = site;
-                            break;
                         }
                     }
                 }
-                if(selectedSite == null && using) {
+                if(selectedSite == null && using.get()) {
                     new ErrorCommandHandler(sender).stillOccupied("site");
                     return;
                 } else if(selectedSite == null) {
@@ -103,14 +122,21 @@ public class PlayerCommandHandler {
         }
         Player player = (Player) sender;
         player.teleport(selectedSite.getSpawn());
-        usingSiteMap.put(selectedSite, player.getName());
+        usingSiteList.add(new Point<>(selectedSite, player.getName(), new StopWatch()));
         placedBlockMap.put(player.getName(), new ArrayList<>());
-        player.sendMessage(getMessage("player.join_success").replace("%site%", selectedSite.getDisplayName()));
+        player.sendMessage(getMessage("player.join_success").replace("%site%", selectedSite.getDisplayName())
+                .replace("&", "§"));
     }
 
     public void exit() {
         Player player = (Player) sender;
-        if(usingSiteMap.containsValue(player.getName())) {
+        AtomicBoolean contains = new AtomicBoolean(false);
+        usingSiteList.forEach(s -> {
+            if(s.getValue1().equals(player.getName())) {
+                contains.set(true);
+            }
+        });
+        if(contains.get()) {
             Common.resetSite(player);
         } else {
             new ErrorCommandHandler(sender).notInSomewhere("site");
@@ -119,11 +145,18 @@ public class PlayerCommandHandler {
 
     public void spawn() {
         Player player = (Player) sender;
-        if(!usingSiteMap.containsValue(player.getName())) {
+        AtomicBoolean contains = new AtomicBoolean(false);
+        usingSiteList.forEach(s -> {
+            if(s.getValue1().equals(player.getName())) {
+                contains.set(true);
+            }
+        });
+        if(!contains.get()) {
             new ErrorCommandHandler(sender).notInSomewhere("site");
+            return;
         }
-        for(Map.Entry<Site, String> entry : usingSiteMap.entrySet()) {
-            if(entry.getValue().equals(player.getName())) {
+        for(Point<Site, String, StopWatch> entry : usingSiteList) {
+            if(entry.getValue1().equals(player.getName())) {
                 player.teleport(entry.getKey().getSpawn());
                 player.sendMessage(getMessage("player.teleport_success"));
                 return;

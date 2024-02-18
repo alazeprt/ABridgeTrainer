@@ -3,8 +3,9 @@ package com.alazeprt.abt.events;
 import com.alazeprt.abt.ABridgeTrainer;
 import com.alazeprt.abt.commands.ErrorCommandHandler;
 import com.alazeprt.abt.commands.PlayerCommandHandler;
-import com.alazeprt.abt.utils.Common;
+import com.alazeprt.abt.utils.Point;
 import com.alazeprt.abt.utils.Site;
+import org.apache.commons.lang.time.StopWatch;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,7 +19,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.List;
-import java.util.Map;
 
 import static com.alazeprt.abt.utils.Common.*;
 
@@ -38,34 +38,30 @@ public class BasicEventHandler implements Listener {
     @EventHandler
     public void onExit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        if(usingSiteMap.containsValue(player.getName())) {
-            Common.resetSite(player);
-        }
+        usingSiteList.removeIf(s -> s.getValue1().equalsIgnoreCase(player.getName()));
     }
 
     @EventHandler
     public void onRespawn(PlayerRespawnEvent event) {
         System.out.println(1);
         Player player = event.getPlayer();
-        if(usingSiteMap.containsValue(player.getName())) {
-            for(Map.Entry<Site, String> entry : usingSiteMap.entrySet()) {
-                if(!entry.getValue().equals(player.getName())) {
-                    continue;
-                }
-                Site site = entry.getKey();
-                event.setRespawnLocation(site.getSpawn());
-                break;
+        for(Point<Site, String, StopWatch> entry : usingSiteList) {
+            if(!entry.getValue1().equals(player.getName())) {
+                continue;
             }
-        } else {
-            player.sendMessage(getMessage("player.auto_teleport_to_lobby"));
-            if(data.get("lobby") == null) {
-                new ErrorCommandHandler(player).lobbyNotSet();
-                return;
-            }
-            Location lobby = new Location(Bukkit.getWorld(data.getString("lobby.world")), data.getDouble("lobby.x"),
-                    data.getDouble("lobby.y"), data.getDouble("lobby.z"));
-            event.setRespawnLocation(lobby);
+            Site site = entry.getKey();
+            event.setRespawnLocation(site.getSpawn());
+            return;
         }
+        player.sendMessage(getMessage("player.teleport_success"));
+        player.sendMessage(getMessage("player.auto_teleport_to_lobby"));
+        if(data.get("lobby") == null) {
+            new ErrorCommandHandler(player).lobbyNotSet();
+            return;
+        }
+        Location lobby = new Location(Bukkit.getWorld(data.getString("lobby.world")), data.getDouble("lobby.x"),
+                data.getDouble("lobby.y"), data.getDouble("lobby.z"));
+        event.setRespawnLocation(lobby);
         player.sendMessage(getMessage("player.teleport_success"));
     }
 
@@ -74,8 +70,8 @@ public class BasicEventHandler implements Listener {
         if(event.getPlayer().hasPermission("abt.admin")) {
             return;
         }
-        for(Map.Entry<Site, String> entry : usingSiteMap.entrySet()) {
-            if(!entry.getValue().equals(event.getPlayer().getName())) {
+        for(Point<Site, String, StopWatch> entry : usingSiteList) {
+            if(!entry.getValue1().equals(event.getPlayer().getName())) {
                 continue;
             }
             Site site = entry.getKey();
@@ -83,17 +79,20 @@ public class BasicEventHandler implements Listener {
                     (site.getPos1().getX() <= event.getBlockPlaced().getX() && event.getBlockPlaced().getX() <= site.getPos2().getX())) {
                 if((site.getPos1().getZ() >= event.getBlockPlaced().getZ() && event.getBlockPlaced().getZ() >= site.getPos2().getZ()) ||
                         (site.getPos1().getZ() <= event.getBlockPlaced().getZ() && event.getBlockPlaced().getZ() <= site.getPos2().getZ())) {
-                    for(Object object : getConfiguration("siteBlocks", List.class)) {
-                        try {
-                            Material.valueOf(object.toString().toUpperCase());
-                        } catch (Exception e) {
-                            continue;
-                        }
-                        if(event.getBlock().getType().equals(Material.valueOf(object.toString().toUpperCase()))) {
-                            List<Location> newList = placedBlockMap.get(event.getPlayer().getName());
-                            newList.add(event.getBlock().getLocation());
-                            placedBlockMap.put(event.getPlayer().getName(), newList);
-                            return;
+                    if((site.getPos1().getY() >= event.getBlock().getY() && event.getBlock().getY() > site.getPos2().getY()) ||
+                            (site.getPos1().getY() <= event.getBlock().getY() && event.getBlock().getY() < site.getPos2().getY())) {
+                        for(Object object : getConfiguration("siteBlocks", List.class)) {
+                            try {
+                                Material.valueOf(object.toString().toUpperCase());
+                            } catch (Exception e) {
+                                continue;
+                            }
+                            if(event.getBlock().getType().equals(Material.valueOf(object.toString().toUpperCase()))) {
+                                List<Location> newList = placedBlockMap.get(event.getPlayer().getName());
+                                newList.add(event.getBlock().getLocation());
+                                placedBlockMap.put(event.getPlayer().getName(), newList);
+                                return;
+                            }
                         }
                     }
                 }
@@ -108,8 +107,8 @@ public class BasicEventHandler implements Listener {
         if(event.getPlayer().hasPermission("abt.admin")) {
             return;
         }
-        for(Map.Entry<Site, String> entry : usingSiteMap.entrySet()) {
-            if(!entry.getValue().equals(event.getPlayer().getName())) {
+        for(Point<Site, String, StopWatch> entry : usingSiteList) {
+            if(!entry.getValue1().equals(event.getPlayer().getName())) {
                 continue;
             }
             Site site = entry.getKey();
@@ -117,12 +116,15 @@ public class BasicEventHandler implements Listener {
                     (site.getPos1().getX() <= event.getBlock().getX() && event.getBlock().getX() <= site.getPos2().getX())) {
                 if((site.getPos1().getZ() >= event.getBlock().getZ() && event.getBlock().getZ() >= site.getPos2().getZ()) ||
                         (site.getPos1().getZ() <= event.getBlock().getZ() && event.getBlock().getZ() <= site.getPos2().getZ())) {
-                    for(Location location : placedBlockMap.get(event.getPlayer().getName())) {
-                        if(event.getBlock().getLocation().equals(location)) {
-                            List<Location> newList = placedBlockMap.get(event.getPlayer().getName());
-                            newList.remove(event.getBlock().getLocation());
-                            placedBlockMap.put(event.getPlayer().getName(), newList);
-                            return;
+                    if((site.getPos1().getY() >= event.getBlock().getY() && event.getBlock().getY() > site.getPos2().getY()) ||
+                            (site.getPos1().getY() <= event.getBlock().getY() && event.getBlock().getY() < site.getPos2().getY())) {
+                        for(Location location : placedBlockMap.get(event.getPlayer().getName())) {
+                            if(event.getBlock().getLocation().equals(location)) {
+                                List<Location> newList = placedBlockMap.get(event.getPlayer().getName());
+                                newList.remove(event.getBlock().getLocation());
+                                placedBlockMap.put(event.getPlayer().getName(), newList);
+                                return;
+                            }
                         }
                     }
                 }
@@ -135,15 +137,12 @@ public class BasicEventHandler implements Listener {
     static class killPlayerRunnable implements Runnable {
         @Override
         public void run() {
-            for(String playerName : usingSiteMap.values()) {
-                Player player = Bukkit.getPlayer(playerName);
-                if(player == null) {
-                    continue;
-                }
-                if(player.getLocation().getY() < getConfiguration("deathYPosition", Integer.class)) {
+            usingSiteList.forEach(s -> {
+                Player player = Bukkit.getPlayer(s.getValue1());
+                if(player != null && player.getLocation().getY() < getConfiguration("deathYPosition", Integer.class)) {
                     player.damage(114514);
                 }
-            }
+            });
         }
     }
 }

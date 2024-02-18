@@ -1,6 +1,7 @@
 package com.alazeprt.abt.utils;
 
 import com.alazeprt.abt.commands.PlayerCommandHandler;
+import org.apache.commons.lang.time.StopWatch;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,8 +15,8 @@ public class Common {
     public static YamlConfiguration data;
     public static final List<Group> groupList = new ArrayList<>();
     public static final List<Site> siteList = new ArrayList<>();
-    public static final Map<Site, String> usingSiteMap = new HashMap<>();
     public static final List<TempSite> tempSiteList = new ArrayList<>();
+    public static final List<Point<Site, String, StopWatch>> usingSiteList = new ArrayList<>();
     public static final Map<String, List<Location>> placedBlockMap = new HashMap<>();
     public static String getMessage(String node) {
         String origin = message.getString(node) == null ? "" : message.getString(node);
@@ -86,10 +87,12 @@ public class Common {
 
     public static void resetSite(Player player) {
         new PlayerCommandHandler(player).lobby();
-        for(Map.Entry<Site, String> entry : usingSiteMap.entrySet()) {
-            if(entry.getValue().equals(player.getName())) {
-                usingSiteMap.remove(entry.getKey());
-                resetSite(entry.getValue(), entry.getKey());
+        Iterator<Point<Site, String, StopWatch>> iterator = usingSiteList.iterator();
+        while(iterator.hasNext()) {
+            Point<Site, String, StopWatch> entry = iterator.next();
+            if(entry.getValue1().equals(player.getName())) {
+                iterator.remove();
+                resetSite(entry.getValue1(), entry.getKey());
             }
         }
         player.sendMessage(getMessage("player.exit_success"));
@@ -105,8 +108,8 @@ public class Common {
     }
 
     public static void resetAllSite() {
-        for(Map.Entry<Site, String> entry : usingSiteMap.entrySet()) {
-            resetSite(entry.getValue(), entry.getKey());
+        for(Point<Site, String, StopWatch> entry : usingSiteList) {
+            resetSite(entry.getValue1(), entry.getKey());
         }
     }
 

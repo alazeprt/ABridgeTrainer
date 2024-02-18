@@ -10,7 +10,7 @@ public class TempSite {
     private Location spawn;
     private Location endPos;
     private Group group;
-    private Site originSite;;;;;;;;;;
+    private Site originSite;
     public TempSite(String name) {
         this.name = name;
     }
